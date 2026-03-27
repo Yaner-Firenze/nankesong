@@ -2,37 +2,35 @@ import { loginAdminAction } from "@/actions/admin-actions";
 
 export function AdminLoginForm({ error }: { error?: string }) {
   return (
-    <form action={loginAdminAction} className="grid gap-5 rounded-3xl border border-neutral-200 bg-white p-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight text-neutral-950">
-          Admin Login
+    <form action={loginAdminAction} className="panel grid gap-6 p-8">
+      <div className="space-y-3">
+        <p className="eyebrow">内部使用</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+          管理后台登录
         </h1>
-        <p className="text-sm leading-6 text-neutral-600">
-          Use the shared admin password to access internal direct-pass records.
+        <p className="text-sm leading-7 text-muted-foreground">
+          输入后台共享密码后，可查看直通卡记录并填写内部备注。
         </p>
       </div>
 
       {error ? (
-        <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">
-          Invalid password. Try again.
+        <p className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive-foreground">
+          密码错误，请重新输入。
         </p>
       ) : null}
 
-      <label className="grid gap-2 text-sm font-medium text-neutral-800">
-        <span>Password</span>
+      <label className="field-label">
+        <span>密码</span>
         <input
-          className="rounded-2xl border border-neutral-300 px-4 py-3 outline-none transition focus:border-neutral-950"
+          className="field-input"
           name="password"
           required
           type="password"
         />
       </label>
 
-      <button
-        className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-neutral-800"
-        type="submit"
-      >
-        Sign In
+      <button className="primary-button" type="submit">
+        登录后台
       </button>
     </form>
   );

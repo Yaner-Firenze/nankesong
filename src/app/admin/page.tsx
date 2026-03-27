@@ -14,7 +14,7 @@ export default async function AdminPage({
   const items = await searchPasses(query);
 
   return (
-    <main className="mx-auto min-h-screen max-w-4xl px-6 py-16">
+    <main className="page-shell max-w-5xl">
       <AdminPassList items={items} query={query} />
     </main>
   );

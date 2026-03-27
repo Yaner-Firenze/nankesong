@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Nankesong S2 Direct Pass",
-  description: "Direct pass registration and QR generation for Nankesong S2.",
+  title: "南客松 S2 直通卡系统",
+  description: "南客松 S2 正式活动用直通卡登记与核验系统。",
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html className="dark" lang="zh-CN">
       <body>{children}</body>
     </html>
   );

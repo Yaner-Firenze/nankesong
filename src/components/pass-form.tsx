@@ -18,10 +18,10 @@ function Field({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-medium text-neutral-800">
+    <label className="field-label">
       <span>{label}</span>
       <input
-        className="rounded-2xl border border-neutral-300 px-4 py-3 outline-none transition focus:border-neutral-950"
+        className="field-input"
         name={name}
         required={required}
         type={type}
@@ -34,61 +34,85 @@ export function PassForm({ type }: PassFormProps) {
   const isTeam = type === "team";
 
   return (
-    <form action={createPassAction} className="grid gap-5 rounded-3xl border border-neutral-200 bg-white p-6">
+    <form action={createPassAction} className="panel grid gap-8 p-8 sm:p-10">
       <input name="type" type="hidden" value={type} />
 
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight text-neutral-950">
-          {isTeam ? "Team Direct Pass" : "Individual Direct Pass"}
+      <div className="space-y-4">
+        <span className="status-pill">
+          {isTeam ? "团队直通卡" : "个人直通卡"}
+        </span>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          {isTeam ? "团队直通卡登记" : "个人直通卡登记"}
         </h1>
-        <p className="text-sm leading-6 text-neutral-600">
+        <p className="max-w-2xl text-sm leading-7 text-muted-foreground">
           {isTeam
-            ? "Submit the team and primary contact details to generate a pass."
-            : "Submit the individual details to generate a pass."}
+            ? "请填写团队基础信息与主联系人信息。提交后将生成一张可用于现场核验的团队直通卡。"
+            : "请填写个人基础信息。提交后将生成一张可用于现场核验的个人直通卡。"}
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        {isTeam ? (
-          <>
-            <Field label="Team Name" name="teamName" />
-            <Field label="Contact Name" name="contactName" />
-            <Field label="Contact Info" name="contactInfo" />
-            <Field label="Team Size" name="teamSize" type="number" />
-          </>
-        ) : (
-          <>
-            <Field label="Name" name="name" />
-            <Field label="Contact Info" name="contactInfo" />
-          </>
-        )}
-        <Field label="Project Name" name="projectName" />
-        <Field label="Role" name="role" />
+      <div className="grid gap-6">
+        <section className="panel-soft grid gap-4 p-5">
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold text-foreground">基础信息</h2>
+            <p className="text-sm text-muted-foreground">
+              {isTeam
+                ? "优先填写团队名称、联系人和项目概览。"
+                : "请填写你的个人信息与项目概览。"}
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {isTeam ? (
+              <>
+                <Field label="团队名称" name="teamName" />
+                <Field label="主联系人姓名" name="contactName" />
+                <Field label="联系方式" name="contactInfo" />
+                <Field label="团队人数" name="teamSize" type="number" />
+              </>
+            ) : (
+              <>
+                <Field label="姓名" name="name" />
+                <Field label="联系方式" name="contactInfo" />
+              </>
+            )}
+            <Field label="项目名称" name="projectName" />
+            <Field label="角色" name="role" />
+          </div>
+        </section>
+
+        <section className="panel-soft grid gap-4 p-5">
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold text-foreground">项目说明</h2>
+            <p className="text-sm text-muted-foreground">
+              这部分信息会展示在核验页中，建议尽量简洁清楚。
+            </p>
+          </div>
+
+          <label className="field-label">
+            <span>项目一句话介绍</span>
+            <textarea
+              className="field-input min-h-32 resize-y"
+              name="projectSummary"
+              required
+            />
+          </label>
+
+          <label className="field-label">
+            <span>备注</span>
+            <textarea className="field-input min-h-24 resize-y" name="userNote" />
+          </label>
+        </section>
       </div>
 
-      <label className="grid gap-2 text-sm font-medium text-neutral-800">
-        <span>Project Summary</span>
-        <textarea
-          className="min-h-32 rounded-2xl border border-neutral-300 px-4 py-3 outline-none transition focus:border-neutral-950"
-          name="projectSummary"
-          required
-        />
-      </label>
-
-      <label className="grid gap-2 text-sm font-medium text-neutral-800">
-        <span>Note</span>
-        <textarea
-          className="min-h-24 rounded-2xl border border-neutral-300 px-4 py-3 outline-none transition focus:border-neutral-950"
-          name="userNote"
-        />
-      </label>
-
-      <button
-        className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-5 py-3 text-sm font-medium text-white transition hover:bg-neutral-800"
-        type="submit"
-      >
-        Generate Direct Pass
-      </button>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <p className="text-sm leading-6 text-muted-foreground">
+          提交后将立即生成专属直通卡二维码，请截图保存。
+        </p>
+        <button className="primary-button" type="submit">
+          生成直通卡
+        </button>
+      </div>
     </form>
   );
 }

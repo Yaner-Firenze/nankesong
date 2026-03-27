@@ -21,7 +21,7 @@ export default async function ApplyPage({
   }
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-6 py-16">
+    <main className="page-shell max-w-4xl">
       <PassForm type={type} />
     </main>
   );

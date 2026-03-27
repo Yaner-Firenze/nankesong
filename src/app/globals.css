@@ -1,1 +1,232 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: hsl(0 0% 98%);
+  --foreground: hsl(222.2 47.4% 11.2%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222.2 47.4% 11.2%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222.2 47.4% 11.2%);
+  --primary: hsl(205 100% 30%);
+  --primary-foreground: hsl(0 0% 98%);
+  --secondary: hsl(0 100% 57%);
+  --secondary-foreground: hsl(0 0% 98%);
+  --muted: hsl(210 40% 96.1%);
+  --muted-foreground: hsl(215.4 16.3% 46.9%);
+  --accent: hsl(210 40% 96.1%);
+  --accent-foreground: hsl(222.2 47.4% 11.2%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  --border: hsl(214.3 31.8% 91.4%);
+  --input: hsl(214.3 31.8% 91.4%);
+  --ring: hsl(205 100% 30%);
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(222.2 47.4% 11.2%);
+  --sidebar-primary: hsl(205 100% 30%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(210 40% 96.1%);
+  --sidebar-accent-foreground: hsl(222.2 47.4% 11.2%);
+  --sidebar-border: hsl(214.3 31.8% 91.4%);
+  --sidebar-ring: hsl(205 100% 30%);
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --radius: 0.5rem;
+  --shadow-x: 0;
+  --shadow-y: 0.125rem;
+  --shadow-blur: 0.25rem;
+  --shadow-spread: 0;
+  --shadow-opacity: 0.05;
+  --shadow-color: 0 0% 0%;
+  --shadow-2xs: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.03);
+  --shadow-xs: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.03);
+  --shadow-sm: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.05),
+    0 1px 2px -1px hsl(0 0% 0% / 0.05);
+  --shadow: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.05),
+    0 1px 2px -1px hsl(0 0% 0% / 0.05);
+  --shadow-md: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.05),
+    0 2px 4px -1px hsl(0 0% 0% / 0.05);
+  --shadow-lg: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.05),
+    0 4px 6px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xl: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.05),
+    0 8px 10px -1px hsl(0 0% 0% / 0.05);
+  --shadow-2xl: 0 0.125rem 0.25rem 0 hsl(0 0% 0% / 0.13);
+  --tracking-normal: normal;
+}
+
+.dark {
+  --background: hsl(208 100% 18%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(208 100% 18%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(208 100% 18%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(205 100% 65%);
+  --primary-foreground: hsl(208 100% 18%);
+  --secondary: hsl(0 100% 57%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(215 20.2% 65.1%);
+  --accent: hsl(217.2 32.6% 17.5%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217.2 32.6% 17.5%);
+  --input: hsl(217.2 32.6% 17.5%);
+  --ring: hsl(205 100% 65%);
+  --sidebar: hsl(208 100% 13%);
+  --sidebar-foreground: hsl(210 40% 98%);
+  --sidebar-primary: hsl(205 100% 65%);
+  --sidebar-primary-foreground: hsl(208 100% 20%);
+  --sidebar-accent: hsl(217.2 32.6% 17.5%);
+  --sidebar-accent-foreground: hsl(210 40% 98%);
+  --sidebar-border: hsl(217.2 32.6% 17.5%);
+  --sidebar-ring: hsl(205 100% 65%);
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --radius: 0.5rem;
+  --shadow-x: 0;
+  --shadow-y: 0.25rem;
+  --shadow-blur: 0.5rem;
+  --shadow-spread: 0;
+  --shadow-opacity: 0.3;
+  --shadow-color: 0 0% 0%;
+  --shadow-2xs: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.15);
+  --shadow-xs: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.15);
+  --shadow-sm: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.3),
+    0 1px 2px -1px hsl(0 0% 0% / 0.3);
+  --shadow: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.3),
+    0 1px 2px -1px hsl(0 0% 0% / 0.3);
+  --shadow-md: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.3),
+    0 2px 4px -1px hsl(0 0% 0% / 0.3);
+  --shadow-lg: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.3),
+    0 4px 6px -1px hsl(0 0% 0% / 0.3);
+  --shadow-xl: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.3),
+    0 8px 10px -1px hsl(0 0% 0% / 0.3);
+  --shadow-2xl: 0 0.25rem 0.5rem 0 hsl(0 0% 0% / 0.75);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    letter-spacing: var(--tracking-normal);
+    background-image:
+      radial-gradient(circle at top, hsl(205 100% 65% / 0.14), transparent 28%),
+      radial-gradient(circle at 85% 16%, hsl(0 100% 57% / 0.14), transparent 18%),
+      linear-gradient(180deg, hsl(208 100% 19%), hsl(208 100% 14%));
+    min-height: 100vh;
+  }
+
+  a,
+  button,
+  input,
+  textarea {
+    @apply transition-colors duration-200;
+  }
+
+  ::selection {
+    background: hsl(205 100% 65% / 0.35);
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto min-h-screen px-6 py-16;
+  }
+
+  .panel {
+    @apply rounded-[28px] border border-border/80 bg-card/90 shadow-xl shadow-black/20 backdrop-blur;
+  }
+
+  .panel-soft {
+    @apply rounded-[24px] border border-border/60 bg-accent/50;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.28em] text-primary;
+  }
+
+  .field-label {
+    @apply grid gap-2 text-sm font-medium text-card-foreground;
+  }
+
+  .field-input {
+    @apply rounded-2xl border border-input bg-background/70 px-4 py-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20;
+  }
+
+  .primary-button {
+    @apply inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90;
+  }
+
+  .ghost-button {
+    @apply inline-flex items-center justify-center rounded-full border border-border/80 bg-background/40 px-4 py-2 text-sm font-medium text-foreground hover:bg-accent;
+  }
+
+  .status-pill {
+    @apply inline-flex items-center rounded-full border border-primary/30 bg-primary/12 px-3 py-1 text-xs font-semibold tracking-[0.18em] text-primary;
+  }
+}
