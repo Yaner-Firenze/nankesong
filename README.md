@@ -12,3 +12,12 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and set:
+
+- `DATABASE_URL`
+- `APP_URL`
+- `ADMIN_PASSWORD`
+- `ADMIN_COOKIE_SECRET`
