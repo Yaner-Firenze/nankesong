@@ -7,7 +7,8 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: "pnpm dev",
+    command:
+      "DATABASE_URL=memory://local APP_URL=http://127.0.0.1:3000 ADMIN_PASSWORD=test-admin ADMIN_COOKIE_SECRET=test-cookie pnpm dev --hostname 127.0.0.1",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
   },
