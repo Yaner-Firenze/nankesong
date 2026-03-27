@@ -18,7 +18,19 @@ export async function createPass(input: CreatePassInput) {
   if (useMemoryStore()) {
     const createdAt = new Date();
     const memoryRecord: Pass = {
-      ...record,
+      id: record.id,
+      type: record.type,
+      status: record.status,
+      name: record.name ?? null,
+      teamName: record.teamName ?? null,
+      contactName: record.contactName,
+      contactInfo: record.contactInfo,
+      role: record.role,
+      projectName: record.projectName,
+      projectSummary: record.projectSummary,
+      teamSize: record.teamSize ?? null,
+      userNote: record.userNote ?? null,
+      internalNote: record.internalNote ?? null,
       createdAt,
       updatedAt: createdAt,
     };
