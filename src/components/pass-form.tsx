@@ -49,8 +49,8 @@ export function PassForm({ type }: PassFormProps) {
               </h2>
               <p className="text-base leading-relaxed text-background/80">
                 {isTeam
-                  ? "请填写团队信息和主联系人信息。提交完成后，页面会生成一张团队直通卡。"
-                  : "请填写个人信息。提交完成后，页面会生成一张个人直通卡。"}
+                  ? "请填写团队信息和主联系人信息。提交完成后，页面会生成一张可用于南客松 S2 报名投递的团队直通卡。"
+                  : "请填写个人信息。提交完成后，页面会生成一张可用于南客松 S2 报名投递的个人直通卡。"}
               </p>
             </div>
 
@@ -70,7 +70,7 @@ export function PassForm({ type }: PassFormProps) {
               <div className="grid gap-3 py-5">
                 <p className="eyebrow text-background/70">步骤 03</p>
                 <p className="text-lg leading-relaxed">
-                  到场后出示二维码，工作人员扫码即可核对信息。
+                  在南客松 S2 报名时投递二维码，活动方即可查看你的登记信息。
                 </p>
               </div>
             </div>
@@ -130,7 +130,7 @@ export function PassForm({ type }: PassFormProps) {
 
             <div className="grid gap-4 border-t-4 border-foreground pt-6 md:grid-cols-[1fr_auto] md:items-end">
               <p className="text-base leading-relaxed text-muted-foreground">
-                提交后会直接生成直通卡二维码。建议先截图保存，方便现场出示。
+                提交后会直接生成直通卡二维码。建议先截图保存，便于在报名时投递。
               </p>
               <button className="primary-button" type="submit">
                 生成直通卡 →

@@ -31,7 +31,7 @@ export default async function ApplyPage({
               {type === "team" ? "团队直通卡登记" : "个人直通卡登记"}
             </h1>
             <p className="max-w-3xl text-lg leading-relaxed">
-              请按页面提示填写信息。提交完成后，页面会生成一张专属直通卡二维码，现场出示即可。
+              请按页面提示填写信息。提交完成后，页面会生成一张专属直通卡二维码，在南客松 S2 报名时投递即可。
             </p>
           </div>
           <Link className="ghost-button" href="/">

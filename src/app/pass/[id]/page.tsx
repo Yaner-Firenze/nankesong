@@ -41,18 +41,18 @@ export default async function PassDetailPage({
             <span className="status-pill">有效直通卡</span>
             <h1 className="section-title">直通卡信息</h1>
             <p className="text-lg leading-relaxed">
-              工作人员扫码后，可在这里核对本次登记信息。
+              在南客松 S2 报名环节打开此页，即可查看本次登记信息。
             </p>
           </div>
 
           <div className="panel-invert panel-pattern-diagonal p-6 md:p-8">
             <div className="grid gap-3">
-              <p className="eyebrow text-background/70">核对提示</p>
+              <p className="eyebrow text-background/70">查看提示</p>
               <p className="font-serif text-3xl tracking-tight">
-                请重点核对身份与项目信息
+                请重点查看身份与项目信息
               </p>
               <p className="text-base leading-relaxed text-background/80">
-                请先核对姓名或团队名称、主联系人、项目名称和联系方式是否一致。
+                请先查看姓名或团队名称、主联系人、项目名称和联系方式是否完整。
               </p>
             </div>
           </div>
