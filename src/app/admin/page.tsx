@@ -14,7 +14,7 @@ export default async function AdminPage({
   const items = await searchPasses(query);
 
   return (
-    <main className="page-shell max-w-5xl">
+    <main className="page-shell max-w-5xl" id="main-content">
       <AdminPassList items={items} query={query} />
     </main>
   );

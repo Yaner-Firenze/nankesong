@@ -6,4 +6,16 @@ describe("getEnv", () => {
 
     expect(() => getEnv()).toThrow();
   });
+
+  it("does not require APP_URL to read server-only configuration", async () => {
+    const { getEnv } = await import("@/lib/env");
+
+    expect(() =>
+      getEnv({
+        DATABASE_URL: "memory://local",
+        ADMIN_PASSWORD: "test-admin",
+        ADMIN_COOKIE_SECRET: "test-cookie",
+      })
+    ).not.toThrow();
+  });
 });

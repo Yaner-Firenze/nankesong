@@ -16,9 +16,9 @@ function DetailRow({
   }
 
   return (
-    <div className="grid gap-1 border-t border-border/70 py-4 first:border-t-0 first:pt-0">
-      <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
-      <dd className="text-base text-foreground">{value}</dd>
+    <div className="grid gap-3 border-b border-foreground py-5 last:border-b-0">
+      <dt className="data-key">{label}</dt>
+      <dd className="text-lg leading-relaxed">{value}</dd>
     </div>
   );
 }
@@ -38,35 +38,47 @@ export default async function AdminPassDetailPage({
   }
 
   return (
-    <main className="page-shell max-w-5xl">
-      <section className="panel grid gap-8 p-8 md:grid-cols-[1fr_0.9fr] md:p-10">
-        <div>
-          <p className="eyebrow">记录详情</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-            {pass.projectName}
-          </h1>
-          <dl className="mt-6">
-            <DetailRow
-              label={pass.type === "team" ? "团队名称" : "姓名"}
-              value={pass.type === "team" ? pass.teamName : pass.name}
-            />
-            <DetailRow label="主联系人" value={pass.contactName} />
-            <DetailRow label="联系方式" value={pass.contactInfo} />
-            <DetailRow label="角色" value={pass.role} />
-            <DetailRow label="项目一句话介绍" value={pass.projectSummary} />
-            <DetailRow label="当前备注" value={pass.internalNote} />
-          </dl>
+    <main className="page-shell" id="main-content">
+      <section className="page-rule-heavy grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid gap-6">
+          <div className="grid gap-3">
+            <p className="eyebrow">记录详情</p>
+            <h1 className="section-title">{pass.projectName}</h1>
+            <div className="flex flex-wrap gap-3">
+              <span className="status-pill">
+                {pass.type === "team" ? "团队记录" : "个人记录"}
+              </span>
+              <span className="status-pill">后台可编辑备注</span>
+            </div>
+          </div>
+
+          <section className="panel p-6 md:p-8">
+            <dl className="grid gap-0 border-t border-foreground">
+              <DetailRow
+                label={pass.type === "team" ? "团队名称" : "姓名"}
+                value={pass.type === "team" ? pass.teamName : pass.name}
+              />
+              <DetailRow label="主联系人" value={pass.contactName} />
+              <DetailRow label="联系方式" value={pass.contactInfo} />
+              <DetailRow label="角色" value={pass.role} />
+              <DetailRow label="项目一句话介绍" value={pass.projectSummary} />
+              <DetailRow label="当前备注" value={pass.internalNote} />
+            </dl>
+          </section>
         </div>
 
-        <div className="panel-soft p-5">
-          <div className="mb-4 space-y-1">
-            <h2 className="text-lg font-semibold text-foreground">内部备注</h2>
-            <p className="text-sm leading-6 text-muted-foreground">
-              该备注仅在后台显示，不会出现在公开核验页。
-            </p>
+        <section className="panel-invert panel-pattern-grid p-6 md:p-8">
+          <div className="grid gap-5">
+            <div className="grid gap-3 border-b border-background/30 pb-5">
+              <p className="eyebrow text-background/70">内部备注</p>
+              <h2 className="font-serif text-4xl tracking-tight">内部备注</h2>
+              <p className="text-base leading-relaxed text-background/80">
+                这里填写的内容只在后台可见，公开核验页不会显示。
+              </p>
+            </div>
+            <AdminNoteForm id={pass.id} internalNote={pass.internalNote} />
           </div>
-          <AdminNoteForm id={pass.id} internalNote={pass.internalNote} />
-        </div>
+        </section>
       </section>
     </main>
   );

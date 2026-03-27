@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { PassForm } from "@/components/pass-form";
@@ -21,8 +22,25 @@ export default async function ApplyPage({
   }
 
   return (
-    <main className="page-shell max-w-4xl">
-      <PassForm type={type} />
+    <main className="page-shell" id="main-content">
+      <section className="page-rule-heavy grid gap-8">
+        <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-start">
+          <div className="grid gap-3">
+            <p className="eyebrow">填写说明</p>
+            <h1 className="section-title">
+              {type === "team" ? "团队直通卡登记" : "个人直通卡登记"}
+            </h1>
+            <p className="max-w-3xl text-lg leading-relaxed">
+              请按页面提示填写信息。提交完成后，页面会生成一张专属直通卡二维码，现场出示即可。
+            </p>
+          </div>
+          <Link className="ghost-button" href="/">
+            返回入口
+          </Link>
+        </div>
+
+        <PassForm type={type} />
+      </section>
     </main>
   );
 }

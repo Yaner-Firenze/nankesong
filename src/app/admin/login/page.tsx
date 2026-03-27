@@ -16,7 +16,7 @@ export default async function AdminLoginPage({
   const error = typeof params.error === "string" ? params.error : undefined;
 
   return (
-    <main className="page-shell mx-auto flex max-w-xl items-center">
+    <main className="page-shell mx-auto flex max-w-xl items-center" id="main-content">
       <AdminLoginForm error={error} />
     </main>
   );

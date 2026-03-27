@@ -1,9 +1,9 @@
 import QRCode from "qrcode";
 
-import { getEnv } from "@/lib/env";
+import { getAppUrl } from "@/lib/env";
 
 export function buildPassUrl(id: string) {
-  const baseUrl = getEnv().APP_URL.replace(/\/$/, "");
+  const baseUrl = getAppUrl();
 
   return `${baseUrl}/pass/${id}`;
 }

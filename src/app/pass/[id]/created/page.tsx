@@ -20,7 +20,7 @@ export default async function PassCreatedPage({
   const passUrl = buildPassUrl(id);
 
   return (
-    <main className="page-shell max-w-5xl">
+    <main className="page-shell max-w-5xl" id="main-content">
       <PassSuccessCard id={id} passUrl={passUrl} qrDataUrl={qrDataUrl} />
     </main>
   );

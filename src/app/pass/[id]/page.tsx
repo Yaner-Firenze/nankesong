@@ -14,9 +14,9 @@ function DetailRow({
   }
 
   return (
-    <div className="grid gap-1 border-t border-border/70 py-4 first:border-t-0 first:pt-0">
-      <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
-      <dd className="text-base text-foreground">{value}</dd>
+    <div className="grid gap-3 border-b border-foreground py-5 last:border-b-0">
+      <dt className="data-key">{label}</dt>
+      <dd className="text-lg leading-relaxed">{value}</dd>
     </div>
   );
 }
@@ -34,43 +34,57 @@ export default async function PassDetailPage({
   }
 
   return (
-    <main className="page-shell max-w-4xl">
-      <section className="panel p-8 md:p-10">
-        <div className="space-y-4">
-          <span className="status-pill">有效直通卡</span>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            直通卡信息
-          </h1>
-          <p className="text-base leading-8 text-muted-foreground">
-            本页面供南客松 S2 工作人员现场扫码后核验使用。
-          </p>
+    <main className="page-shell" id="main-content">
+      <section className="page-rule-heavy grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid gap-6">
+          <div className="grid gap-4">
+            <span className="status-pill">有效直通卡</span>
+            <h1 className="section-title">直通卡信息</h1>
+            <p className="text-lg leading-relaxed">
+              工作人员扫码后，可在这里核对本次登记信息。
+            </p>
+          </div>
+
+          <div className="panel-invert panel-pattern-diagonal p-6 md:p-8">
+            <div className="grid gap-3">
+              <p className="eyebrow text-background/70">核对提示</p>
+              <p className="font-serif text-3xl tracking-tight">
+                请重点核对身份与项目信息
+              </p>
+              <p className="text-base leading-relaxed text-background/80">
+                请先核对姓名或团队名称、主联系人、项目名称和联系方式是否一致。
+              </p>
+            </div>
+          </div>
         </div>
 
-        <dl className="mt-8">
-          <DetailRow label="状态" value="有效" />
-          <DetailRow
-            label="直通卡类型"
-            value={pass.type === "team" ? "团队" : "个人"}
-          />
-          <DetailRow label="直通卡编号" value={pass.id} />
-          <DetailRow
-            label={pass.type === "team" ? "团队名称" : "姓名"}
-            value={pass.type === "team" ? pass.teamName : pass.name}
-          />
-          <DetailRow label="主联系人" value={pass.contactName} />
-          <DetailRow label="联系方式" value={pass.contactInfo} />
-          <DetailRow label="项目名称" value={pass.projectName} />
-          <DetailRow label="角色" value={pass.role} />
-          <DetailRow label="团队人数" value={pass.teamSize} />
-          <DetailRow label="项目一句话介绍" value={pass.projectSummary} />
-          <DetailRow
-            label="提交时间"
-            value={new Intl.DateTimeFormat("zh-CN", {
-              dateStyle: "medium",
-              timeStyle: "short",
-            }).format(pass.createdAt)}
-          />
-        </dl>
+        <section className="panel p-6 md:p-8">
+          <dl className="grid gap-0 border-t border-foreground">
+            <DetailRow label="状态" value="有效" />
+            <DetailRow
+              label="直通卡类型"
+              value={pass.type === "team" ? "团队" : "个人"}
+            />
+            <DetailRow label="直通卡编号" value={pass.id} />
+            <DetailRow
+              label={pass.type === "team" ? "团队名称" : "姓名"}
+              value={pass.type === "team" ? pass.teamName : pass.name}
+            />
+            <DetailRow label="主联系人" value={pass.contactName} />
+            <DetailRow label="联系方式" value={pass.contactInfo} />
+            <DetailRow label="项目名称" value={pass.projectName} />
+            <DetailRow label="角色" value={pass.role} />
+            <DetailRow label="团队人数" value={pass.teamSize} />
+            <DetailRow label="项目一句话介绍" value={pass.projectSummary} />
+            <DetailRow
+              label="提交时间"
+              value={new Intl.DateTimeFormat("zh-CN", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              }).format(pass.createdAt)}
+            />
+          </dl>
+        </section>
       </section>
     </main>
   );
