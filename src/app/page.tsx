@@ -33,7 +33,7 @@ export default function Home() {
             <div className="grid gap-4 border-b border-foreground py-6 md:grid-cols-[160px_1fr]">
               <p className="eyebrow text-foreground">流程 02</p>
               <p className="text-lg leading-relaxed">
-                提交完成后会生成一张直通卡二维码，现场扫码即可查看登记信息。
+                提交完成后会生成一张直通卡二维码，在南客松 S2 报名时投递即可。
               </p>
             </div>
             <div className="grid gap-4 py-6 md:grid-cols-[160px_1fr]">
@@ -43,6 +43,10 @@ export default function Home() {
               </p>
             </div>
           </div>
+
+          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            备注：目前生成的二维码需使用 VPN 扫描打开。
+          </p>
         </div>
 
         <div className="panel-invert panel-pattern-grid p-6 md:p-8">
