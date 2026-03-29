@@ -2,7 +2,13 @@
 
 import { useFormStatus } from "react-dom";
 
-export function PassSubmitButton() {
+export function PassSubmitButton({
+  idleLabel = "生成直通卡 →",
+  pendingLabel = "生成中...",
+}: {
+  idleLabel?: string;
+  pendingLabel?: string;
+}) {
   const { pending } = useFormStatus();
 
   return (
@@ -12,7 +18,7 @@ export function PassSubmitButton() {
       disabled={pending}
       type="submit"
     >
-      {pending ? "生成中..." : "生成直通卡 →"}
+      {pending ? pendingLabel : idleLabel}
     </button>
   );
 }

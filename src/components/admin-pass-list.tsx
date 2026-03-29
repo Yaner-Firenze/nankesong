@@ -16,19 +16,24 @@ export function AdminPassList({
           <p className="eyebrow">活动方后台</p>
           <h1 className="section-title">直通卡管理后台</h1>
           <p className="max-w-3xl text-lg leading-relaxed">
-            你可以在这里搜索直通卡记录、查看详情，并补充内部备注。
+            你可以在这里新建直通卡、搜索记录、查看详情，并补充内部备注。
           </p>
         </div>
-        <div className="grid min-w-56 gap-0 border-2 border-foreground">
-          <div className="border-b border-foreground px-4 py-3">
-            <p className="data-key">当前记录数</p>
-            <p className="mt-2 text-2xl font-serif">{items.length}</p>
-          </div>
-          <div className="px-4 py-3">
-            <p className="data-key">搜索状态</p>
-            <p className="mt-2 text-sm leading-relaxed">
-              {query ? `当前关键词：${query}` : "当前显示全部记录"}
-            </p>
+        <div className="grid gap-4 md:justify-items-end">
+          <Link className="primary-button justify-center text-center" href="/admin/new">
+            新建直通卡 →
+          </Link>
+          <div className="grid min-w-56 gap-0 border-2 border-foreground">
+            <div className="border-b border-foreground px-4 py-3">
+              <p className="data-key">当前记录数</p>
+              <p className="mt-2 text-2xl font-serif">{items.length}</p>
+            </div>
+            <div className="px-4 py-3">
+              <p className="data-key">搜索状态</p>
+              <p className="mt-2 text-sm leading-relaxed">
+                {query ? `当前关键词：${query}` : "当前显示全部记录"}
+              </p>
+            </div>
           </div>
         </div>
       </div>

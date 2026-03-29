@@ -1,8 +1,14 @@
 import { expect, test } from "@playwright/test";
 
 test("admins can soft delete a pass record", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("link", { name: /团队直通卡登记/i }).click();
+  await page.goto("/admin");
+  await expect(page).toHaveURL(/\/admin\/login$/);
+
+  await page.getByLabel(/密码/i).fill("test-admin");
+  await page.getByRole("button", { name: /登录后台/i }).click();
+
+  await page.getByRole("link", { name: /新建直通卡/i }).click();
+  await page.getByRole("link", { name: /^团队直通卡$/i }).click();
 
   await page.getByLabel(/团队名称/i).fill("Delete Flow Team");
   await page.getByLabel(/主联系人姓名/i).fill("Casey");
@@ -15,20 +21,11 @@ test("admins can soft delete a pass record", async ({ page }) => {
     .fill("A flow created for the delete test");
   await page.getByRole("button", { name: /生成直通卡/i }).click();
 
-  await expect(page).toHaveURL(/\/pass\/[^/]+\/created$/);
+  await expect(page).toHaveURL(/\/admin\/pass\/[^/]+$/);
   const createdUrl = page.url();
-  const passId = createdUrl.match(/\/pass\/([^/]+)\/created$/)?.[1];
+  const passId = createdUrl.match(/\/admin\/pass\/([^/?#]+)/)?.[1];
 
   expect(passId).toBeTruthy();
-
-  await page.goto("/admin");
-  await expect(page).toHaveURL(/\/admin\/login$/);
-
-  await page.getByLabel(/密码/i).fill("test-admin");
-  await page.getByRole("button", { name: /登录后台/i }).click();
-
-  await page.getByLabel(/搜索直通卡/i).fill("Delete Console");
-  await page.getByRole("link", { name: /delete console/i }).click();
 
   page.once("dialog", (dialog) => dialog.accept());
   await page.getByRole("button", { name: /删除记录/i }).click();

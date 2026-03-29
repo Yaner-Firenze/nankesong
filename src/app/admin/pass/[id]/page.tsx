@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 import { AdminDeleteForm } from "@/components/admin-delete-form";
 import { AdminNoteForm } from "@/components/admin-note-form";
 import { requireAdmin } from "@/lib/admin-auth";
 import { getPassRecordById } from "@/lib/passes";
+import { buildPassQrDataUrl, buildPassUrl } from "@/lib/qr";
 
 function DetailRow({
   label,
@@ -37,6 +39,9 @@ export default async function AdminPassDetailPage({
   if (!pass) {
     notFound();
   }
+
+  const passUrl = buildPassUrl(pass.id);
+  const qrDataUrl = await buildPassQrDataUrl(pass.id);
 
   return (
     <main className="page-shell" id="main-content">
@@ -76,6 +81,24 @@ export default async function AdminPassDetailPage({
               <p className="text-base leading-relaxed text-background/80">
                 这里填写的内容只在后台可见，公开核验页不会显示。
               </p>
+            </div>
+            <div className="grid gap-4 border-b border-background/30 pb-5">
+              <p className="eyebrow text-background/70">对外发放</p>
+              <div className="border-4 border-background bg-background p-4">
+                <img
+                  alt={`${pass.projectName} 的直通卡二维码`}
+                  className="mx-auto block w-full max-w-56 bg-white"
+                  src={qrDataUrl}
+                />
+              </div>
+              <div className="grid gap-2 text-sm leading-relaxed text-background/80">
+                <p className="data-key text-background/60">公开链接</p>
+                <p className="break-all">{passUrl}</p>
+                <p>创建完成后，可将这张二维码或公开链接发给对应个人或团队。</p>
+                <Link className="secondary-button border-background text-background hover:bg-background hover:text-foreground" href={passUrl} target="_blank">
+                  打开公开详情页 →
+                </Link>
+              </div>
             </div>
             <AdminNoteForm id={pass.id} internalNote={pass.internalNote} />
             <AdminDeleteForm id={pass.id} />

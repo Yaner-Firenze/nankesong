@@ -1,8 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
-import { PassSuccessCard } from "@/components/pass-success-card";
 import { getPassById } from "@/lib/passes";
-import { buildPassQrDataUrl, buildPassUrl } from "@/lib/qr";
 
 export default async function PassCreatedPage({
   params,
@@ -16,12 +14,5 @@ export default async function PassCreatedPage({
     notFound();
   }
 
-  const qrDataUrl = await buildPassQrDataUrl(id);
-  const passUrl = buildPassUrl(id);
-
-  return (
-    <main className="page-shell max-w-5xl" id="main-content">
-      <PassSuccessCard id={id} passUrl={passUrl} qrDataUrl={qrDataUrl} />
-    </main>
-  );
+  redirect(`/pass/${id}`);
 }

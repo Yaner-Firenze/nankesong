@@ -41,7 +41,7 @@ export default async function PassDetailPage({
             <span className="status-pill">有效直通卡</span>
             <h1 className="section-title">直通卡信息</h1>
             <p className="text-lg leading-relaxed">
-              南客松直通卡，请在飞书报名表单中提交，南客松运营团队审核后即刻直通。
+              这是由南客松主办方发放的直通卡。请在飞书报名表单中提交这张二维码或对应链接。
             </p>
           </div>
 
@@ -49,10 +49,10 @@ export default async function PassDetailPage({
             <div className="grid gap-3">
               <p className="eyebrow text-background/70">报名说明</p>
               <p className="font-serif text-3xl tracking-tight">
-                请在飞书报名表单中提交
+                请在飞书报名表单中提交直通卡
               </p>
               <p className="text-base leading-relaxed text-background/80">
-                南客松运营团队审核后即刻直通。
+                若信息无误，主办方即可根据这张直通卡完成后续核对。
               </p>
             </div>
           </div>

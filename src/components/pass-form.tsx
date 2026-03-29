@@ -4,6 +4,7 @@ import { PassSubmitButton } from "@/components/pass-submit-button";
 type PassType = "individual" | "team";
 
 type PassFormProps = {
+  mode?: "public" | "admin";
   submissionKey: string;
   type: PassType;
 };
@@ -32,11 +33,17 @@ function Field({
   );
 }
 
-export function PassForm({ submissionKey, type }: PassFormProps) {
+export function PassForm({
+  mode = "public",
+  submissionKey,
+  type,
+}: PassFormProps) {
   const isTeam = type === "team";
+  const isAdmin = mode === "admin";
 
   return (
     <form action={createPassAction} className="grid gap-10">
+      <input name="mode" type="hidden" value={mode} />
       <input name="submissionKey" type="hidden" value={submissionKey} />
       <input name="type" type="hidden" value={type} />
 
@@ -48,12 +55,22 @@ export function PassForm({ submissionKey, type }: PassFormProps) {
                 {isTeam ? "团队直通卡" : "个人直通卡"}
               </span>
               <h2 className="font-serif text-4xl tracking-tight md:text-5xl">
-                {isTeam ? "提交团队信息" : "提交个人信息"}
+                {isAdmin
+                  ? isTeam
+                    ? "录入团队信息"
+                    : "录入个人信息"
+                  : isTeam
+                    ? "提交团队信息"
+                    : "提交个人信息"}
               </h2>
               <p className="text-base leading-relaxed text-background/80">
-                {isTeam
-                  ? "请填写团队信息和主联系人信息。提交完成后，页面会生成一张可用于南客松 S2 报名投递的团队直通卡。"
-                  : "请填写个人信息。提交完成后，页面会生成一张可用于南客松 S2 报名投递的个人直通卡。"}
+                {isAdmin
+                  ? isTeam
+                    ? "请填写团队信息和主联系人信息。创建后会立即生成一张可发给对应团队的直通卡。"
+                    : "请填写个人信息。创建后会立即生成一张可发给对应个人的直通卡。"
+                  : isTeam
+                    ? "请填写团队信息和主联系人信息。提交完成后，页面会生成一张可用于南客松 S2 报名投递的团队直通卡。"
+                    : "请填写个人信息。提交完成后，页面会生成一张可用于南客松 S2 报名投递的个人直通卡。"}
               </p>
             </div>
 
@@ -61,19 +78,29 @@ export function PassForm({ submissionKey, type }: PassFormProps) {
               <div className="grid gap-3 border-b border-background/30 py-5">
                 <p className="eyebrow text-background/70">步骤 01</p>
                 <p className="text-lg leading-relaxed">
-                  {isTeam ? "先填写团队信息和主联系人信息。" : "先填写个人信息和项目信息。"}
+                  {isTeam
+                    ? isAdmin
+                      ? "先录入团队信息和主联系人信息。"
+                      : "先填写团队信息和主联系人信息。"
+                    : isAdmin
+                      ? "先录入个人信息和项目信息。"
+                      : "先填写个人信息和项目信息。"}
                 </p>
               </div>
               <div className="grid gap-3 border-b border-background/30 py-5">
                 <p className="eyebrow text-background/70">步骤 02</p>
                 <p className="text-lg leading-relaxed">
-                  提交后，页面会生成一张专属二维码。
+                  {isAdmin
+                    ? "创建后，系统会立即生成这张直通卡。"
+                    : "提交后，页面会生成一张专属二维码。"}
                 </p>
               </div>
               <div className="grid gap-3 py-5">
                 <p className="eyebrow text-background/70">步骤 03</p>
                 <p className="text-lg leading-relaxed">
-                  在南客松 S2 报名时投递二维码，活动方即可查看你的登记信息。
+                  {isAdmin
+                    ? "随后可在后台详情页复制公开链接或二维码，并发给对应个人或团队。"
+                    : "在南客松 S2 报名时投递二维码，活动方即可查看你的登记信息。"}
                 </p>
               </div>
             </div>
@@ -123,7 +150,7 @@ export function PassForm({ submissionKey, type }: PassFormProps) {
               </label>
 
               <label className="field-label">
-                <span>备注</span>
+                <span>{isAdmin ? "补充说明" : "备注"}</span>
                 <textarea
                   className="field-input min-h-24 resize-y"
                   name="userNote"
@@ -133,9 +160,14 @@ export function PassForm({ submissionKey, type }: PassFormProps) {
 
             <div className="grid gap-4 border-t-4 border-foreground pt-6 md:grid-cols-[1fr_auto] md:items-end">
               <p className="text-base leading-relaxed text-muted-foreground">
-                提交后会直接生成直通卡二维码。建议先截图保存，便于在报名时投递。
+                {isAdmin
+                  ? "创建后会立即生效。你可以在后台详情页复制公开链接或发送二维码。"
+                  : "提交后会直接生成直通卡二维码。建议先截图保存，便于在报名时投递。"}
               </p>
-              <PassSubmitButton />
+              <PassSubmitButton
+                idleLabel="生成直通卡 →"
+                pendingLabel={isAdmin ? "创建中..." : "生成中..."}
+              />
             </div>
           </div>
         </section>

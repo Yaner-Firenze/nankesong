@@ -1,7 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { requireAdmin } from "@/lib/admin-auth";
 import { createPass } from "@/lib/passes";
 import { createPassSchema } from "@/lib/validation/pass";
 
@@ -12,6 +14,7 @@ function readString(formData: FormData, key: string) {
 }
 
 export async function createPassAction(formData: FormData) {
+  const mode = readString(formData, "mode");
   const type = readString(formData, "type");
 
   const parsed = createPassSchema.parse(
@@ -40,7 +43,19 @@ export async function createPassAction(formData: FormData) {
         }
   );
 
+  if (mode === "admin") {
+    await requireAdmin();
+  }
+
   const record = await createPass(parsed);
+
+  revalidatePath("/admin");
+  revalidatePath(`/admin/pass/${record.id}`);
+  revalidatePath(`/pass/${record.id}`);
+
+  if (mode === "admin") {
+    redirect(`/admin/pass/${record.id}`);
+  }
 
   redirect(`/pass/${record.id}/created`);
 }
