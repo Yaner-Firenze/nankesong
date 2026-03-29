@@ -1,4 +1,4 @@
-import { desc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, ne, or, sql } from "drizzle-orm";
 
 import { getDb } from "@/lib/db/client";
 import { passes, type Pass } from "@/lib/db/schema";
@@ -7,6 +7,7 @@ import { getEnv } from "@/lib/env";
 import type { CreatePassInput } from "@/lib/validation/pass";
 
 const memoryPasses = new Map<string, Pass>();
+const memoryPassIdsBySubmissionKey = new Map<string, string>();
 
 function useMemoryStore() {
   return getEnv().DATABASE_URL.startsWith("memory://");
@@ -16,9 +17,18 @@ export async function createPass(input: CreatePassInput) {
   const record = toPassInsert(input);
 
   if (useMemoryStore()) {
+    if (record.submissionKey) {
+      const existingId = memoryPassIdsBySubmissionKey.get(record.submissionKey);
+
+      if (existingId) {
+        return memoryPasses.get(existingId) as Pass;
+      }
+    }
+
     const createdAt = new Date();
     const memoryRecord: Pass = {
       id: record.id,
+      submissionKey: record.submissionKey ?? null,
       type: record.type,
       status: record.status,
       name: record.name ?? null,
@@ -36,24 +46,79 @@ export async function createPass(input: CreatePassInput) {
     };
 
     memoryPasses.set(record.id, memoryRecord);
+
+    if (record.submissionKey) {
+      memoryPassIdsBySubmissionKey.set(record.submissionKey, record.id);
+    }
+
     return memoryRecord;
   }
 
   const db = getDb();
+
+  if (record.submissionKey) {
+    const existing = await getPassBySubmissionKey(record.submissionKey);
+
+    if (existing) {
+      return existing;
+    }
+
+    await db
+      .insert(passes)
+      .values(record)
+      .onConflictDoNothing({ target: passes.submissionKey });
+
+    return (await getPassBySubmissionKey(record.submissionKey)) as Pass;
+  }
+
   await db.insert(passes).values(record);
 
   return (await getPassById(record.id)) as Pass;
 }
 
-export async function getPassById(id: string) {
+async function getPassBySubmissionKey(submissionKey: string) {
   if (useMemoryStore()) {
-    return memoryPasses.get(id);
+    const existingId = memoryPassIdsBySubmissionKey.get(submissionKey);
+    return existingId ? memoryPasses.get(existingId) : undefined;
   }
 
   const db = getDb();
 
   return db.query.passes.findFirst({
-    where: eq(passes.id, id),
+    where: eq(passes.submissionKey, submissionKey),
+  });
+}
+
+export async function getPassById(id: string) {
+  return getPassRecordById(id, { includeDeleted: false });
+}
+
+export async function getPassRecordById(
+  id: string,
+  options?: { includeDeleted?: boolean }
+) {
+  const includeDeleted = options?.includeDeleted ?? true;
+
+  if (useMemoryStore()) {
+    const record = memoryPasses.get(id);
+
+    if (!record) {
+      return undefined;
+    }
+
+    if (!includeDeleted && record.status === "deleted") {
+      return undefined;
+    }
+
+    return record;
+  }
+
+  const db = getDb();
+
+  return db.query.passes.findFirst({
+    where: includeDeleted
+      ? eq(passes.id, id)
+      : and(eq(passes.id, id), ne(passes.status, "deleted")),
   });
 }
 
@@ -66,19 +131,15 @@ export async function searchPasses(query?: string) {
     );
 
     if (!keyword) {
-      return records.slice(0, 100);
+      return records.filter((record) => record.status !== "deleted").slice(0, 100);
     }
 
     const lowered = keyword.toLowerCase();
 
     return records
       .filter((record) =>
-        [
-          record.name,
-          record.teamName,
-          record.contactName,
-          record.projectName,
-        ]
+        record.status !== "deleted" &&
+        [record.name, record.teamName, record.contactName, record.projectName]
           .filter(Boolean)
           .some((value) => value!.toLowerCase().includes(lowered))
       )
@@ -92,13 +153,16 @@ export async function searchPasses(query?: string) {
     .from(passes)
     .where(
       keyword
-        ? or(
-            ilike(passes.name, `%${keyword}%`),
-            ilike(passes.teamName, `%${keyword}%`),
-            ilike(passes.contactName, `%${keyword}%`),
-            ilike(passes.projectName, `%${keyword}%`)
+        ? and(
+            ne(passes.status, "deleted"),
+            or(
+              ilike(passes.name, `%${keyword}%`),
+              ilike(passes.teamName, `%${keyword}%`),
+              ilike(passes.contactName, `%${keyword}%`),
+              ilike(passes.projectName, `%${keyword}%`)
+            )
           )
-        : undefined
+        : ne(passes.status, "deleted")
     )
     .orderBy(desc(passes.createdAt))
     .limit(100);
@@ -132,5 +196,36 @@ export async function updateInternalNote(id: string, internalNote: string) {
     })
     .where(eq(passes.id, id));
 
-  return getPassById(id);
+  return getPassRecordById(id);
+}
+
+export async function deletePass(id: string) {
+  if (useMemoryStore()) {
+    const record = memoryPasses.get(id);
+
+    if (!record) {
+      return undefined;
+    }
+
+    const updatedRecord: Pass = {
+      ...record,
+      status: "deleted",
+      updatedAt: new Date(),
+    };
+
+    memoryPasses.set(id, updatedRecord);
+    return updatedRecord;
+  }
+
+  const db = getDb();
+
+  await db
+    .update(passes)
+    .set({
+      status: "deleted",
+      updatedAt: sql`now()`,
+    })
+    .where(eq(passes.id, id));
+
+  return getPassRecordById(id);
 }

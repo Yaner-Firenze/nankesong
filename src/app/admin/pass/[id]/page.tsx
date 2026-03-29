@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 
+import { AdminDeleteForm } from "@/components/admin-delete-form";
 import { AdminNoteForm } from "@/components/admin-note-form";
 import { requireAdmin } from "@/lib/admin-auth";
-import { getPassById } from "@/lib/passes";
+import { getPassRecordById } from "@/lib/passes";
 
 function DetailRow({
   label,
@@ -31,7 +32,7 @@ export default async function AdminPassDetailPage({
   await requireAdmin();
 
   const { id } = await params;
-  const pass = await getPassById(id);
+  const pass = await getPassRecordById(id);
 
   if (!pass) {
     notFound();
@@ -77,6 +78,7 @@ export default async function AdminPassDetailPage({
               </p>
             </div>
             <AdminNoteForm id={pass.id} internalNote={pass.internalNote} />
+            <AdminDeleteForm id={pass.id} />
           </div>
         </section>
       </section>

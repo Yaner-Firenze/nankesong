@@ -4,6 +4,7 @@ import type { CreatePassInput } from "@/lib/validation/pass";
 export function toPassInsert(input: CreatePassInput): NewPass {
   const baseRecord = {
     id: crypto.randomUUID(),
+    submissionKey: input.submissionKey ?? null,
     type: input.type,
     status: "active",
     contactInfo: input.contactInfo,
@@ -18,6 +19,7 @@ export function toPassInsert(input: CreatePassInput): NewPass {
     return {
       ...baseRecord,
       id: baseRecord.id,
+      submissionKey: baseRecord.submissionKey,
       type: "individual",
       status: "active",
       name: input.name,
@@ -36,6 +38,7 @@ export function toPassInsert(input: CreatePassInput): NewPass {
   return {
     ...baseRecord,
     id: baseRecord.id,
+    submissionKey: baseRecord.submissionKey,
     type: "team",
     status: "active",
     name: null,

@@ -1,8 +1,10 @@
 import { createPassAction } from "@/actions/pass-actions";
+import { PassSubmitButton } from "@/components/pass-submit-button";
 
 type PassType = "individual" | "team";
 
 type PassFormProps = {
+  submissionKey: string;
   type: PassType;
 };
 
@@ -30,11 +32,12 @@ function Field({
   );
 }
 
-export function PassForm({ type }: PassFormProps) {
+export function PassForm({ submissionKey, type }: PassFormProps) {
   const isTeam = type === "team";
 
   return (
     <form action={createPassAction} className="grid gap-10">
+      <input name="submissionKey" type="hidden" value={submissionKey} />
       <input name="type" type="hidden" value={type} />
 
       <div className="grid gap-6 md:grid-cols-[0.9fr_1.1fr]">
@@ -132,9 +135,7 @@ export function PassForm({ type }: PassFormProps) {
               <p className="text-base leading-relaxed text-muted-foreground">
                 提交后会直接生成直通卡二维码。建议先截图保存，便于在报名时投递。
               </p>
-              <button className="primary-button" type="submit">
-                生成直通卡 →
-              </button>
+              <PassSubmitButton />
             </div>
           </div>
         </section>

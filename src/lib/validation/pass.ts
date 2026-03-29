@@ -5,6 +5,7 @@ const basePassSchema = z.object({
   projectName: z.string().trim().min(1),
   role: z.string().trim().min(1),
   projectSummary: z.string().trim().min(1),
+  submissionKey: z.string().uuid().optional(),
   userNote: z.string().trim().optional(),
 });
 

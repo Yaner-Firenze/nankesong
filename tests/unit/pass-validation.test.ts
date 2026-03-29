@@ -7,6 +7,7 @@ const validIndividual = {
   projectName: "Solo Agent",
   role: "Builder",
   projectSummary: "A compact AI helper",
+  submissionKey: "550e8400-e29b-41d4-a716-446655440000",
   userNote: "VIP",
 };
 
@@ -19,6 +20,7 @@ const validTeam = {
   projectName: "Team Console",
   role: "Founder",
   projectSummary: "A shared ops dashboard",
+  submissionKey: "550e8400-e29b-41d4-a716-446655440001",
   userNote: "Priority review",
 };
 
@@ -67,6 +69,17 @@ describe("createPassSchema", () => {
     const result = createPassSchema.safeParse({
       ...validIndividual,
       type: "guest",
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects an invalid submission key", async () => {
+    const { createPassSchema } = await import("@/lib/validation/pass");
+
+    const result = createPassSchema.safeParse({
+      ...validIndividual,
+      submissionKey: "not-a-uuid",
     });
 
     expect(result.success).toBe(false);

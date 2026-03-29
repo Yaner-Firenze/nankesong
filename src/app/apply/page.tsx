@@ -39,7 +39,7 @@ export default async function ApplyPage({
           </Link>
         </div>
 
-        <PassForm type={type} />
+        <PassForm submissionKey={crypto.randomUUID()} type={type} />
       </section>
     </main>
   );

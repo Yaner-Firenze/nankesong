@@ -25,6 +25,7 @@ export async function createPassAction(formData: FormData) {
           projectName: readString(formData, "projectName"),
           role: readString(formData, "role"),
           projectSummary: readString(formData, "projectSummary"),
+          submissionKey: readString(formData, "submissionKey") || undefined,
           userNote: readString(formData, "userNote") || undefined,
         }
       : {
@@ -34,6 +35,7 @@ export async function createPassAction(formData: FormData) {
           projectName: readString(formData, "projectName"),
           role: readString(formData, "role"),
           projectSummary: readString(formData, "projectSummary"),
+          submissionKey: readString(formData, "submissionKey") || undefined,
           userNote: readString(formData, "userNote") || undefined,
         }
   );

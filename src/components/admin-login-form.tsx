@@ -11,9 +11,15 @@ export function AdminLoginForm({ error }: { error?: string }) {
         </p>
       </div>
 
-      {error ? (
+      {error === "invalid" ? (
         <p className="border-2 border-foreground bg-foreground px-4 py-3 text-sm text-background">
           密码错误，请重新输入。
+        </p>
+      ) : null}
+
+      {error === "rate_limited" ? (
+        <p className="border-2 border-foreground bg-foreground px-4 py-3 text-sm text-background">
+          登录尝试过多，请 15 分钟后再试。
         </p>
       ) : null}
 
