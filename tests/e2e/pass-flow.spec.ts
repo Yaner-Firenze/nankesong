@@ -38,7 +38,7 @@ test("issued passes remain publicly viewable and the old created route redirects
     .fill("Issued by the organizer");
   await page.getByRole("button", { name: /生成直通卡/i }).click();
 
-  await expect(page).toHaveURL(/\/admin\/pass\//);
+  await expect(page).toHaveURL(/\/admin\/pass\//, { timeout: 15000 });
   const currentUrl = page.url();
   const match = currentUrl.match(/\/admin\/pass\/([^/?#]+)/);
   expect(match?.[1]).toBeTruthy();

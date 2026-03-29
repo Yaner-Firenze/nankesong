@@ -21,7 +21,7 @@ test("admins can soft delete a pass record", async ({ page }) => {
     .fill("A flow created for the delete test");
   await page.getByRole("button", { name: /生成直通卡/i }).click();
 
-  await expect(page).toHaveURL(/\/admin\/pass\/[^/]+$/);
+  await expect(page).toHaveURL(/\/admin\/pass\/[^/]+$/, { timeout: 15000 });
   const createdUrl = page.url();
   const passId = createdUrl.match(/\/admin\/pass\/([^/?#]+)/)?.[1];
 

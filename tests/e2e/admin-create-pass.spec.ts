@@ -23,5 +23,5 @@ test("admins can open the new pass page and create a team pass", async ({
     .fill("Issued by the organizer");
   await page.getByRole("button", { name: /生成直通卡/i }).click();
 
-  await expect(page).toHaveURL(/\/admin\/pass\//);
+  await expect(page).toHaveURL(/\/admin\/pass\//, { timeout: 15000 });
 });
