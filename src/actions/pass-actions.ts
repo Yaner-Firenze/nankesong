@@ -13,11 +13,40 @@ function readString(formData: FormData, key: string) {
   return typeof value === "string" ? value : "";
 }
 
+function readTeamMembers(formData: FormData) {
+  return Array.from({ length: 5 }, (_, index) => index + 1)
+    .map((memberIndex) => ({
+      name: readString(formData, `memberName${memberIndex}`).trim(),
+      identityNumber: readString(
+        formData,
+        `memberIdentityNumber${memberIndex}`
+      ).trim(),
+    }))
+    .filter((member) => member.name || member.identityNumber);
+}
+
+function buildValidationRedirectPath(mode: string, type: string) {
+  if (mode === "admin") {
+    const searchParams = new URLSearchParams({
+      error: "validation",
+      type: type === "team" ? "team" : "individual",
+    });
+
+    return `/admin/new?${searchParams.toString()}`;
+  }
+
+  return "/";
+}
+
 export async function createPassAction(formData: FormData) {
   const mode = readString(formData, "mode");
   const type = readString(formData, "type");
 
-  const parsed = createPassSchema.parse(
+  if (mode === "admin") {
+    await requireAdmin();
+  }
+
+  const parsed = createPassSchema.safeParse(
     type === "team"
       ? {
           type,
@@ -25,9 +54,11 @@ export async function createPassAction(formData: FormData) {
           contactName: readString(formData, "contactName"),
           contactInfo: readString(formData, "contactInfo"),
           teamSize: readString(formData, "teamSize"),
+          projectCode: readString(formData, "projectCode"),
           projectName: readString(formData, "projectName"),
           role: readString(formData, "role"),
           projectSummary: readString(formData, "projectSummary"),
+          members: readTeamMembers(formData),
           submissionKey: readString(formData, "submissionKey") || undefined,
           userNote: readString(formData, "userNote") || undefined,
         }
@@ -35,6 +66,7 @@ export async function createPassAction(formData: FormData) {
           type,
           name: readString(formData, "name"),
           contactInfo: readString(formData, "contactInfo"),
+          identityNumber: readString(formData, "identityNumber"),
           projectName: readString(formData, "projectName"),
           role: readString(formData, "role"),
           projectSummary: readString(formData, "projectSummary"),
@@ -43,11 +75,11 @@ export async function createPassAction(formData: FormData) {
         }
   );
 
-  if (mode === "admin") {
-    await requireAdmin();
+  if (!parsed.success) {
+    redirect(buildValidationRedirectPath(mode, type));
   }
 
-  const record = await createPass(parsed);
+  const record = await createPass(parsed.data);
 
   revalidatePath("/admin");
   revalidatePath(`/admin/pass/${record.id}`);

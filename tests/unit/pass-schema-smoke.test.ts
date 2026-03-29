@@ -19,3 +19,13 @@ describe("getEnv", () => {
     ).not.toThrow();
   });
 });
+
+describe("passes schema", () => {
+  it("exposes identity binding fields", async () => {
+    const { passes } = await import("@/lib/db/schema");
+
+    expect(passes.identityNumber).toBeDefined();
+    expect(passes.projectCode).toBeDefined();
+    expect(passes.members).toBeDefined();
+  });
+});

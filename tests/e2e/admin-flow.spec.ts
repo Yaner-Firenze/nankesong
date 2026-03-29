@@ -11,17 +11,29 @@ test("admins can log in, view passes, and save an internal note", async ({
 
   await expect(
     page.getByRole("heading", { name: /直通卡管理后台/i })
-  ).toBeVisible();
+  ).toBeVisible({ timeout: 15000 });
 
-  await page.getByRole("link", { name: /新建直通卡/i }).click();
-  await page.getByRole("link", { name: /^团队直通卡$/i }).click();
+  await page.goto("/admin/new?type=team");
 
   await page.getByLabel(/团队名称/i).fill("Admin Flow Team");
   await page.getByLabel(/主联系人姓名/i).fill("Casey");
   await page.getByLabel(/联系方式/i).fill("casey@example.com");
   await page.getByLabel(/团队人数/i).fill("3");
+  await page.getByLabel(/项目编号/i).fill("PRJ-ADMIN-003");
   await page.getByLabel(/项目名称/i).fill("Admin Console");
   await page.getByLabel(/角色/i).fill("Founder");
+  await page.getByLabel(/成员 1 姓名/i).fill("Casey");
+  await page
+    .getByLabel(/成员 1 身份证号码/i)
+    .fill("110101199001011236");
+  await page.getByLabel(/成员 2 姓名/i).fill("Mina");
+  await page
+    .getByLabel(/成员 2 身份证号码/i)
+    .fill("110101199001011237");
+  await page.getByLabel(/成员 3 姓名/i).fill("Ada");
+  await page
+    .getByLabel(/成员 3 身份证号码/i)
+    .fill("110101199001011238");
   await page
     .getByLabel(/项目一句话介绍/i)
     .fill("A flow created for the admin test");

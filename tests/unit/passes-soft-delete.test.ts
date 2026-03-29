@@ -26,6 +26,7 @@ describe("soft delete passes", () => {
       type: "individual",
       name: "Ada Lovelace",
       contactInfo: "ada@example.com",
+      identityNumber: "110101199001011234",
       projectName: "Soft Delete Console",
       role: "Builder",
       projectSummary: "A compact AI helper",

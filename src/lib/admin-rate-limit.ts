@@ -13,7 +13,7 @@ const MAX_FAILURES = 5;
 
 const memoryAttempts = new Map<string, AdminLoginAttempt>();
 
-function useMemoryStore() {
+function isMemoryStoreEnabled() {
   return getEnv().DATABASE_URL.startsWith("memory://");
 }
 
@@ -30,7 +30,7 @@ function toRetryAfterSeconds(lockUntil: Date | null | undefined) {
 }
 
 async function getAttempt(ip: string) {
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     return memoryAttempts.get(ip);
   }
 
@@ -57,7 +57,7 @@ export async function checkAdminLoginAllowed(ip: string) {
 }
 
 export async function clearAdminLoginAttempts(ip: string) {
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     memoryAttempts.delete(ip);
     return;
   }
@@ -81,7 +81,7 @@ export async function registerFailedAdminLogin(ip: string) {
       ? new Date(currentTime.getTime() + LOCK_MS)
       : null;
 
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     memoryAttempts.set(ip, {
       ip,
       failCount: nextFailCount,

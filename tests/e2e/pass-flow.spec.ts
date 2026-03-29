@@ -31,6 +31,9 @@ test("issued passes remain publicly viewable and the old created route redirects
   await page.getByRole("link", { name: /新建直通卡/i }).click();
   await page.getByLabel(/姓名/i).fill("Ada");
   await page.getByLabel(/联系方式/i).fill("ada@example.com");
+  await page
+    .getByLabel(/身份证号码/i)
+    .fill("110101199001011239");
   await page.getByLabel(/项目名称/i).fill("Public Pass");
   await page.getByLabel(/角色/i).fill("Builder");
   await page
@@ -48,6 +51,7 @@ test("issued passes remain publicly viewable and the old created route redirects
   await expect(
     page.getByText(/由南客松主办方发放的直通卡/i)
   ).toBeVisible();
+  await expect(page.getByText("110101199001011239")).toHaveCount(0);
 
   await page.goto(`/pass/${id}/created`);
   await expect(page).toHaveURL(new RegExp(`/pass/${id}$`));

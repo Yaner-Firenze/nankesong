@@ -1,3 +1,5 @@
+import type { HTMLAttributes } from "react";
+
 import { createPassAction } from "@/actions/pass-actions";
 import { PassSubmitButton } from "@/components/pass-submit-button";
 
@@ -9,24 +11,50 @@ type PassFormProps = {
   type: PassType;
 };
 
+const teamMemberSlots = [1, 2, 3, 4, 5] as const;
+
 function Field({
   label,
   name,
   type = "text",
   required = true,
+  inputMode,
+  max,
+  maxLength,
+  min,
+  minLength,
+  pattern,
+  placeholder,
+  title,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  inputMode?: HTMLAttributes<HTMLInputElement>["inputMode"];
+  max?: number;
+  maxLength?: number;
+  min?: number;
+  minLength?: number;
+  pattern?: string;
+  placeholder?: string;
+  title?: string;
 }) {
   return (
     <label className="field-label">
       <span>{label}</span>
       <input
         className="field-input"
+        inputMode={inputMode}
+        max={max}
+        maxLength={maxLength}
+        min={min}
+        minLength={minLength}
         name={name}
+        pattern={pattern}
+        placeholder={placeholder}
         required={required}
+        title={title}
         type={type}
       />
     </label>
@@ -121,12 +149,31 @@ export function PassForm({
                     <Field label="团队名称" name="teamName" />
                     <Field label="主联系人姓名" name="contactName" />
                     <Field label="联系方式" name="contactInfo" />
-                    <Field label="团队人数" name="teamSize" type="number" />
+                    <Field
+                      label="团队人数"
+                      max={5}
+                      min={2}
+                      name="teamSize"
+                      placeholder="2 至 5"
+                      title="团队人数需为 2 至 5"
+                      type="number"
+                    />
+                    <Field label="项目编号" name="projectCode" />
                   </>
                 ) : (
                   <>
                     <Field label="姓名" name="name" />
                     <Field label="联系方式" name="contactInfo" />
+                    <Field
+                      label="身份证号码"
+                      inputMode="numeric"
+                      maxLength={18}
+                      minLength={18}
+                      name="identityNumber"
+                      pattern="^\d{17}[\dXx]$"
+                      placeholder="18 位身份证号码"
+                      title="身份证号码需为 18 位，最后一位可为数字或 X"
+                    />
                   </>
                 )}
                 <Field label="项目名称" name="projectName" />
@@ -134,9 +181,54 @@ export function PassForm({
               </div>
             </div>
 
+            {isTeam ? (
+              <div className="grid gap-5">
+                <div className="grid gap-2 border-b-4 border-foreground pb-4">
+                  <p className="eyebrow text-foreground">Section B</p>
+                  <h2 className="font-serif text-3xl tracking-tight">
+                    团队成员信息
+                  </h2>
+                </div>
+
+                <div className="grid gap-6">
+                  <p className="text-base leading-relaxed text-muted-foreground">
+                    请填写 2 至 5 名到场成员的信息，每位成员都需要提供姓名和身份证号码。这些信息仅在后台可见。
+                  </p>
+
+                  <div className="grid gap-6">
+                    {teamMemberSlots.map((memberIndex) => (
+                      <div
+                        className="grid gap-4 border-b border-border pb-6 last:border-b-0 last:pb-0 md:grid-cols-2"
+                        key={memberIndex}
+                      >
+                        <Field
+                          label={`成员 ${memberIndex} 姓名`}
+                          name={`memberName${memberIndex}`}
+                          required={memberIndex <= 2}
+                        />
+                        <Field
+                          label={`成员 ${memberIndex} 身份证号码`}
+                          inputMode="numeric"
+                          maxLength={18}
+                          minLength={18}
+                          name={`memberIdentityNumber${memberIndex}`}
+                          pattern="^\d{17}[\dXx]$"
+                          placeholder="18 位身份证号码"
+                          required={memberIndex <= 2}
+                          title="身份证号码需为 18 位，最后一位可为数字或 X"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
             <div className="grid gap-5">
               <div className="grid gap-2 border-b-4 border-foreground pb-4">
-                <p className="eyebrow text-foreground">Section B</p>
+                <p className="eyebrow text-foreground">
+                  {isTeam ? "Section C" : "Section B"}
+                </p>
                 <h2 className="font-serif text-3xl tracking-tight">项目说明</h2>
               </div>
 

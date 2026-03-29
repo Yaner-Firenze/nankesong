@@ -8,20 +8,29 @@ import type { CreatePassInput } from "@/lib/validation/pass";
 
 const memoryPasses = new Map<string, Pass>();
 const memoryPassIdsBySubmissionKey = new Map<string, string>();
+const memoryPassIdsByIdentityNumber = new Map<string, string>();
 
-function useMemoryStore() {
+function isMemoryStoreEnabled() {
   return getEnv().DATABASE_URL.startsWith("memory://");
 }
 
 export async function createPass(input: CreatePassInput) {
   const record = toPassInsert(input);
 
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     if (record.submissionKey) {
       const existingId = memoryPassIdsBySubmissionKey.get(record.submissionKey);
 
       if (existingId) {
         return memoryPasses.get(existingId) as Pass;
+      }
+    }
+
+    if (record.type === "individual" && record.identityNumber) {
+      const existingId = memoryPassIdsByIdentityNumber.get(record.identityNumber);
+
+      if (existingId) {
+        throw new Error("该身份证号码已绑定个人直通卡");
       }
     }
 
@@ -33,6 +42,9 @@ export async function createPass(input: CreatePassInput) {
       status: record.status,
       name: record.name ?? null,
       teamName: record.teamName ?? null,
+      identityNumber: record.identityNumber ?? null,
+      projectCode: record.projectCode ?? null,
+      members: record.members ?? null,
       contactName: record.contactName,
       contactInfo: record.contactInfo,
       role: record.role,
@@ -49,6 +61,10 @@ export async function createPass(input: CreatePassInput) {
 
     if (record.submissionKey) {
       memoryPassIdsBySubmissionKey.set(record.submissionKey, record.id);
+    }
+
+    if (record.type === "individual" && record.identityNumber) {
+      memoryPassIdsByIdentityNumber.set(record.identityNumber, record.id);
     }
 
     return memoryRecord;
@@ -71,13 +87,31 @@ export async function createPass(input: CreatePassInput) {
     return (await getPassBySubmissionKey(record.submissionKey)) as Pass;
   }
 
-  await db.insert(passes).values(record);
+  if (record.type === "individual" && record.identityNumber) {
+    const existing = await db.query.passes.findFirst({
+      where: eq(passes.identityNumber, record.identityNumber),
+    });
+
+    if (existing) {
+      throw new Error("该身份证号码已绑定个人直通卡");
+    }
+  }
+
+  try {
+    await db.insert(passes).values(record);
+  } catch (error) {
+    if (isIdentityNumberConflict(error)) {
+      throw new Error("该身份证号码已绑定个人直通卡");
+    }
+
+    throw error;
+  }
 
   return (await getPassById(record.id)) as Pass;
 }
 
 async function getPassBySubmissionKey(submissionKey: string) {
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     const existingId = memoryPassIdsBySubmissionKey.get(submissionKey);
     return existingId ? memoryPasses.get(existingId) : undefined;
   }
@@ -99,7 +133,7 @@ export async function getPassRecordById(
 ) {
   const includeDeleted = options?.includeDeleted ?? true;
 
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     const record = memoryPasses.get(id);
 
     if (!record) {
@@ -125,7 +159,7 @@ export async function getPassRecordById(
 export async function searchPasses(query?: string) {
   const keyword = query?.trim();
 
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     const records = [...memoryPasses.values()].sort(
       (left, right) => right.createdAt.getTime() - left.createdAt.getTime()
     );
@@ -139,7 +173,13 @@ export async function searchPasses(query?: string) {
     return records
       .filter((record) =>
         record.status !== "deleted" &&
-        [record.name, record.teamName, record.contactName, record.projectName]
+        [
+          record.name,
+          record.teamName,
+          record.contactName,
+          record.projectName,
+          record.projectCode,
+        ]
           .filter(Boolean)
           .some((value) => value!.toLowerCase().includes(lowered))
       )
@@ -159,7 +199,8 @@ export async function searchPasses(query?: string) {
               ilike(passes.name, `%${keyword}%`),
               ilike(passes.teamName, `%${keyword}%`),
               ilike(passes.contactName, `%${keyword}%`),
-              ilike(passes.projectName, `%${keyword}%`)
+              ilike(passes.projectName, `%${keyword}%`),
+              ilike(passes.projectCode, `%${keyword}%`)
             )
           )
         : ne(passes.status, "deleted")
@@ -169,7 +210,7 @@ export async function searchPasses(query?: string) {
 }
 
 export async function updateInternalNote(id: string, internalNote: string) {
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     const record = memoryPasses.get(id);
 
     if (!record) {
@@ -200,7 +241,7 @@ export async function updateInternalNote(id: string, internalNote: string) {
 }
 
 export async function deletePass(id: string) {
-  if (useMemoryStore()) {
+  if (isMemoryStoreEnabled()) {
     const record = memoryPasses.get(id);
 
     if (!record) {
@@ -228,4 +269,15 @@ export async function deletePass(id: string) {
     .where(eq(passes.id, id));
 
   return getPassRecordById(id);
+}
+
+function isIdentityNumberConflict(error: unknown) {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  return (
+    error.message.includes("passes_identity_number_idx") ||
+    error.message.toLowerCase().includes("identity_number")
+  );
 }

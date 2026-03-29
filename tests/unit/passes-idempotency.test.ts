@@ -20,6 +20,7 @@ describe("createPass idempotency", () => {
       type: "individual",
       name: "Ada Lovelace",
       contactInfo: "ada@example.com",
+      identityNumber: "110101199001011234",
       projectName: "Solo Agent",
       role: "Builder",
       projectSummary: "A compact AI helper",
@@ -50,6 +51,7 @@ describe("createPass idempotency", () => {
       type: "individual",
       name: "Ada Lovelace",
       contactInfo: "ada@example.com",
+      identityNumber: "110101199001011234",
       projectName: "Solo Agent",
       role: "Builder",
       projectSummary: "A compact AI helper",
@@ -59,8 +61,9 @@ describe("createPass idempotency", () => {
 
     const second = await createPass({
       type: "individual",
-      name: "Ada Lovelace",
-      contactInfo: "ada@example.com",
+      name: "Grace Hopper",
+      contactInfo: "grace@example.com",
+      identityNumber: "110101199001011235",
       projectName: "Solo Agent",
       role: "Builder",
       projectSummary: "A compact AI helper",

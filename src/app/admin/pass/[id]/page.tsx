@@ -26,6 +26,43 @@ function DetailRow({
   );
 }
 
+function TeamMembersSection({
+  members,
+}: {
+  members:
+    | {
+        identityNumber: string;
+        name: string;
+      }[]
+    | null
+    | undefined;
+}) {
+  if (!members?.length) {
+    return null;
+  }
+
+  return (
+    <div className="grid gap-4 border-b border-foreground py-5">
+      <dt className="data-key">团队成员</dt>
+      <dd>
+        <div className="grid gap-4">
+          {members.map((member, index) => (
+            <div
+              className="grid gap-2 border-b border-border pb-4 last:border-b-0 last:pb-0"
+              key={`${member.identityNumber}-${index}`}
+            >
+              <p className="text-lg leading-relaxed">{member.name}</p>
+              <p className="text-base leading-relaxed text-muted-foreground">
+                身份证号码：{member.identityNumber}
+              </p>
+            </div>
+          ))}
+        </div>
+      </dd>
+    </div>
+  );
+}
+
 export default async function AdminPassDetailPage({
   params,
 }: {
@@ -64,10 +101,20 @@ export default async function AdminPassDetailPage({
                 label={pass.type === "team" ? "团队名称" : "姓名"}
                 value={pass.type === "team" ? pass.teamName : pass.name}
               />
+              <DetailRow
+                label="身份证号码"
+                value={pass.type === "individual" ? pass.identityNumber : null}
+              />
               <DetailRow label="主联系人" value={pass.contactName} />
               <DetailRow label="联系方式" value={pass.contactInfo} />
+              <DetailRow
+                label="项目编号"
+                value={pass.type === "team" ? pass.projectCode : null}
+              />
               <DetailRow label="角色" value={pass.role} />
+              <DetailRow label="团队人数" value={pass.teamSize} />
               <DetailRow label="项目一句话介绍" value={pass.projectSummary} />
+              <TeamMembersSection members={pass.members} />
               <DetailRow label="当前备注" value={pass.internalNote} />
             </dl>
           </section>

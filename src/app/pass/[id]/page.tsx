@@ -72,6 +72,10 @@ export default async function PassDetailPage({
             />
             <DetailRow label="主联系人" value={pass.contactName} />
             <DetailRow label="联系方式" value={pass.contactInfo} />
+            <DetailRow
+              label="项目编号"
+              value={pass.type === "team" ? pass.projectCode : null}
+            />
             <DetailRow label="项目名称" value={pass.projectName} />
             <DetailRow label="角色" value={pass.role} />
             <DetailRow label="团队人数" value={pass.teamSize} />

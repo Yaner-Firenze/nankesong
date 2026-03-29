@@ -12,12 +12,13 @@ function getType(value: string | string[] | undefined): PassType {
 export default async function AdminNewPassPage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string | string[] }>;
+  searchParams: Promise<{ error?: string | string[]; type?: string | string[] }>;
 }) {
   await requireAdmin();
 
   const params = await searchParams;
   const type = getType(params.type);
+  const error = typeof params.error === "string" ? params.error : undefined;
 
   return (
     <main className="page-shell" id="main-content">
@@ -55,6 +56,12 @@ export default async function AdminNewPassPage({
             团队直通卡
           </Link>
         </div>
+
+        {error === "validation" ? (
+          <p className="border-2 border-foreground bg-foreground px-4 py-3 text-sm text-background">
+            提交失败，请检查必填项、身份证号码格式，以及团队成员人数后再试。
+          </p>
+        ) : null}
 
         <PassForm mode="admin" submissionKey={crypto.randomUUID()} type={type} />
       </section>

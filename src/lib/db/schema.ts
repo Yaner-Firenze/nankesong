@@ -1,11 +1,17 @@
 import {
   integer,
+  jsonb,
   pgTable,
   text,
   timestamp,
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
+
+type TeamMember = {
+  identityNumber: string;
+  name: string;
+};
 
 export const passes = pgTable(
   "passes",
@@ -16,6 +22,9 @@ export const passes = pgTable(
     status: varchar("status", { length: 24 }).notNull(),
     name: text("name"),
     teamName: text("team_name"),
+    identityNumber: varchar("identity_number", { length: 18 }),
+    projectCode: varchar("project_code", { length: 64 }),
+    members: jsonb("members").$type<TeamMember[]>(),
     contactName: text("contact_name").notNull(),
     contactInfo: text("contact_info").notNull(),
     role: text("role").notNull(),
@@ -34,6 +43,9 @@ export const passes = pgTable(
   (table) => ({
     submissionKeyIdx: uniqueIndex("passes_submission_key_idx").on(
       table.submissionKey
+    ),
+    identityNumberIdx: uniqueIndex("passes_identity_number_idx").on(
+      table.identityNumber
     ),
   })
 );

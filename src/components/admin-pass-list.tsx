@@ -45,7 +45,7 @@ export function AdminPassList({
             className="field-input"
             defaultValue={query}
             name="q"
-            placeholder="输入团队名称、姓名、联系人或项目名称"
+            placeholder="输入团队名称、姓名、联系人、项目名称或项目编号"
           />
         </label>
       </form>
