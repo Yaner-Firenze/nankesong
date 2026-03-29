@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main className="page-shell" id="main-content">
-      <section className="page-rule-heavy grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+      <section className="page-rule-heavy grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div className="grid gap-8">
           <div className="grid gap-5">
             <p className="eyebrow">南客松 S2 直通卡</p>
